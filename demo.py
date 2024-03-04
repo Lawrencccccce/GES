@@ -28,7 +28,7 @@ def create_dir(dir_path):
 
 if __name__ == "__main__":
 
-    dataset = 'Asia'
+    dataset = 'SACHS'
 
     # Load the data
     current_dir = os.getcwd()

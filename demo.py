@@ -28,12 +28,14 @@ def create_dir(dir_path):
 
 if __name__ == "__main__":
 
+    dataset = 'Asia'
+
     # Load the data
     current_dir = os.getcwd()
-    datapath = os.path.join('datasets', 'LUCAS.npy')
+    datapath = os.path.join('datasets', dataset + '.npy')
     datapath = os.path.join(current_dir, datapath)
 
-    sol_path = os.path.join('datasets', 'LUCAS_sol.npy')
+    sol_path = os.path.join('datasets', dataset + '_sol.npy')
     sol_path = os.path.join(current_dir, sol_path)
 
     plot_dir = os.path.join(current_dir, 'plots')
@@ -56,7 +58,7 @@ if __name__ == "__main__":
     ax = fig.add_subplot(1, 2, 2)
     ax.set_title('true_graph')
     ax.imshow(ground_truth, cmap=plt.cm.binary)
-    plt.savefig('{}/estimated_graph_{}.png'.format(plot_dir, datetime.now(timezone('Australia/Sydney')).strftime('%Y-%m-%d_%H-%M-%S-%f')[:-3]))
+    plt.savefig('{}/{}_estimated_graph_{}.png'.format(plot_dir, dataset, datetime.now(timezone('Australia/Sydney')).strftime('%Y-%m-%d_%H-%M-%S-%f')[:-3]))
     plt.close()
 
 

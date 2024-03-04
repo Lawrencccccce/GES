@@ -2,6 +2,7 @@ from ges.main import fit_bic
 import io
 import numpy as np
 import os
+import matplotlib.pyplot as plt
 
 
 
@@ -15,6 +16,11 @@ if __name__ == "__main__":
 
     data = np.load(datapath).astype(np.float32)
     print(data)
+
+
+    estimate_g, score = fit_bic(data)
+    print(estimate_g)
+    print(score)
 
 
 

@@ -47,6 +47,10 @@ import numpy as np
 class PriorKnowledge:
     def __init__(self):
         self.prior_knowledge = {}
+        self.add_LUCAS_knowledge()
+        self.add_Asia_knowledge()
+        self.add_SACHS_knowledge()
+
 
     def add_LUCAS_knowledge(self):
         self.prior_knowledge['LUCAS'] = {}
@@ -115,11 +119,44 @@ class PriorKnowledge:
         self.prior_knowledge['Asia']['Gemini'][6][7] = 1
 
 
-        pass
 
     def add_SACHS_knowledge(self):
         self.prior_knowledge['SACHS'] = {}
 
         # GPT3 knowledge
         self.prior_knowledge['SACHS']['GPT3'] = np.ones((11, 11)) * 2
-        pass
+        self.prior_knowledge['SACHS']['GPT3'][2][8] = 1
+        self.prior_knowledge['SACHS']['GPT3'][2][3] = 1
+        self.prior_knowledge['SACHS']['GPT3'][3][4] = 1
+        self.prior_knowledge['SACHS']['GPT3'][4][6] = 1
+        self.prior_knowledge['SACHS']['GPT3'][4][7] = 1
+        self.prior_knowledge['SACHS']['GPT3'][5][6] = 1
+        self.prior_knowledge['SACHS']['GPT3'][5][10] = 1
+        self.prior_knowledge['SACHS']['GPT3'][6][9] = 1
+        self.prior_knowledge['SACHS']['GPT3'][7][5] = 1
+        self.prior_knowledge['SACHS']['GPT3'][7][6] = 1
+        self.prior_knowledge['SACHS']['GPT3'][7][9] = 1
+        self.prior_knowledge['SACHS']['GPT3'][8][2] = 1
+        self.prior_knowledge['SACHS']['GPT3'][8][5] = 1
+        self.prior_knowledge['SACHS']['GPT3'][8][6] = 1
+        self.prior_knowledge['SACHS']['GPT3'][8][7] = 1
+        self.prior_knowledge['SACHS']['GPT3'][9][10] = 1
+
+
+        # GPT4 knowledge
+        self.prior_knowledge['SACHS']['GPT4'] = np.ones((11, 11)) * 2
+        self.prior_knowledge['SACHS']['GPT4'][2][8] = 1
+        self.prior_knowledge['SACHS']['GPT4'][2][3] = 1
+        self.prior_knowledge['SACHS']['GPT4'][3][4] = 1
+        self.prior_knowledge['SACHS']['GPT4'][4][6] = 1
+        self.prior_knowledge['SACHS']['GPT4'][0][1] = 1
+        self.prior_knowledge['SACHS']['GPT4'][1][5] = 1
+
+        # Gemini knowledge
+        self.prior_knowledge['SACHS']['Gemini'] = np.ones((11, 11)) * 2
+        self.prior_knowledge['SACHS']['Gemini'][2][3] = 1
+        self.prior_knowledge['SACHS']['Gemini'][3][4] = 1
+        self.prior_knowledge['SACHS']['Gemini'][4][6] = 1
+        self.prior_knowledge['SACHS']['Gemini'][0][1] = 1
+        self.prior_knowledge['SACHS']['Gemini'][1][5] = 1
+        self.prior_knowledge['SACHS']['Gemini'][8][10] = 1

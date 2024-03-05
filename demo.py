@@ -1,7 +1,7 @@
-from ges.main import fit_bic
+from ges.main import fit_bic, fit
 from datetime import datetime
 from pytz import timezone
-from my_socre import PriorScore
+from my_socre import PriorScore, count_accuracy
 import io
 import numpy as np
 import os
@@ -25,22 +25,23 @@ def create_dir(dir_path):
     except Exception as err:
         sys.exit(-1)
 
-def plot_result(estimate_g, ground_truth, plot_dir, dataset):
+def plot_result(estimate_g, ground_truth, plot_dir, dataset, title, accuracy = None):
 
     fig = plt.figure(3)
     ax = fig.add_subplot(1, 2, 1)
-    ax.set_title('est_graph')
+    ax.set_title(title + f" SHD: {accuracy['shd']}")
     ax.imshow(np.around(estimate_g).astype(int),cmap=plt.cm.binary)
     ax = fig.add_subplot(1, 2, 2)
     ax.set_title('true_graph')
     ax.imshow(ground_truth, cmap=plt.cm.binary)
     plt.savefig('{}/{}_estimated_graph_{}.png'.format(plot_dir, dataset, datetime.now(timezone('Australia/Sydney')).strftime('%Y-%m-%d_%H-%M-%S-%f')[:-3]))
     plt.close()
+    print(f"{title} \n {accuracy}")
 
 
 if __name__ == "__main__":
 
-    dataset = 'LUCAS'
+    dataset = 'SACHS'
 
     # Load the data
     current_dir = os.getcwd()
@@ -56,10 +57,13 @@ if __name__ == "__main__":
     data = np.load(datapath).astype(np.float32)
     ground_truth = np.load(sol_path).astype(np.float32)
 
-    score_class = PriorScore(data, dataset = "LUCAS")
-    # estimate_g, score = fit_bic(data)
+    score_class = PriorScore(data, dataset = dataset, prior_weight= 0.29)
 
-    # plot_result(estimate_g, ground_truth, plot_dir, dataset)
+    estimate_g_bic, score_bic = fit_bic(data)
+    estimate_g_prior, score_prior = fit(score_class)
+
+    plot_result(estimate_g_bic, ground_truth, plot_dir, dataset, f"BIC score: {score_bic:.2f}", count_accuracy(ground_truth, estimate_g_bic))
+    plot_result(estimate_g_prior, ground_truth, plot_dir, dataset, f"BIC with prior: {score_prior:.2f}", count_accuracy(ground_truth, estimate_g_prior))
 
     
 

@@ -1,6 +1,7 @@
 from ges.main import fit_bic
 from datetime import datetime
 from pytz import timezone
+from my_socre import PriorScore
 import io
 import numpy as np
 import os
@@ -24,11 +25,22 @@ def create_dir(dir_path):
     except Exception as err:
         sys.exit(-1)
 
+def plot_result(estimate_g, ground_truth, plot_dir, dataset):
+
+    fig = plt.figure(3)
+    ax = fig.add_subplot(1, 2, 1)
+    ax.set_title('est_graph')
+    ax.imshow(np.around(estimate_g).astype(int),cmap=plt.cm.binary)
+    ax = fig.add_subplot(1, 2, 2)
+    ax.set_title('true_graph')
+    ax.imshow(ground_truth, cmap=plt.cm.binary)
+    plt.savefig('{}/{}_estimated_graph_{}.png'.format(plot_dir, dataset, datetime.now(timezone('Australia/Sydney')).strftime('%Y-%m-%d_%H-%M-%S-%f')[:-3]))
+    plt.close()
 
 
 if __name__ == "__main__":
 
-    dataset = 'SACHS'
+    dataset = 'LUCAS'
 
     # Load the data
     current_dir = os.getcwd()
@@ -43,23 +55,13 @@ if __name__ == "__main__":
 
     data = np.load(datapath).astype(np.float32)
     ground_truth = np.load(sol_path).astype(np.float32)
-    print(data)
-    print(ground_truth)
 
+    score_class = PriorScore(data, dataset = "LUCAS")
+    # estimate_g, score = fit_bic(data)
 
-    estimate_g, score = fit_bic(data)
-    print(estimate_g)
-    print(score)
+    # plot_result(estimate_g, ground_truth, plot_dir, dataset)
 
-    fig = plt.figure(3)
-    ax = fig.add_subplot(1, 2, 1)
-    ax.set_title('est_graph')
-    ax.imshow(np.around(estimate_g).astype(int),cmap=plt.cm.binary)
-    ax = fig.add_subplot(1, 2, 2)
-    ax.set_title('true_graph')
-    ax.imshow(ground_truth, cmap=plt.cm.binary)
-    plt.savefig('{}/{}_estimated_graph_{}.png'.format(plot_dir, dataset, datetime.now(timezone('Australia/Sydney')).strftime('%Y-%m-%d_%H-%M-%S-%f')[:-3]))
-    plt.close()
+    
 
 
 

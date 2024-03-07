@@ -19,6 +19,6 @@ if __name__ == "__main__":
 
     score_class = PriorScore(data, dataset = "LUCAS")
     # Run GES with the gaussian BIC score
-    estimate, score = ges.fit(score_class)
+    # estimate, score = ges.fit(score_class)
 
-    print(estimate, score)
+    # print(estimate, score)

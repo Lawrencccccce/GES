@@ -20,7 +20,7 @@ class PriorScore(GaussObsL0Pen):
         super().__init__(data = data, lmbda = lmbda, method = method, cache = cache, debug = debug)
         self.n, self.p = data.shape
         self.data = data
-        self.prior = PriorKnowledge()
+        self.prior = PriorKnowledge(dataset)
         self.dataset = dataset
         self.LLM_weights = {}
         self.prior_weight = prior_weight

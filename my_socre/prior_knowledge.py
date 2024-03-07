@@ -45,11 +45,36 @@ import numpy as np
 
 
 class PriorKnowledge:
-    def __init__(self):
+    def __init__(self, dataset):
         self.prior_knowledge = {}
-        self.add_LUCAS_knowledge()
-        self.add_Asia_knowledge()
-        self.add_SACHS_knowledge()
+        if dataset not in ['LUCAS', 'Asia', 'SACHS']:
+            raise ValueError("The dataset should be one of the following: ['LUCAS', 'Asia', 'SACHS']")
+        
+        if dataset == 'LUCAS':
+            self.add_LUCAS_knowledge()
+        if dataset == 'Asia':
+            self.add_Asia_knowledge()
+        if dataset == 'SACHS':
+            self.add_SACHS_knowledge()
+
+        self.intersection_result = {}
+        self.add_intersection_result()
+
+    def add_intersection_result(self):
+        for dataset in self.prior_knowledge:
+            p = 0
+            edge_sets = []
+            for method in self.prior_knowledge[dataset]:
+                edge_sets.append(set(zip(*np.where(self.prior_knowledge[dataset][method] == 1))))
+                p = self.prior_knowledge[dataset][method].shape[0]
+
+            re = edge_sets[0].intersection(*edge_sets[1:])
+            result_matrix = np.zeros((p, p))
+            for edge in re:
+                result_matrix[edge] = 1
+            self.intersection_result[dataset] = result_matrix
+        
+
 
 
     def add_LUCAS_knowledge(self):

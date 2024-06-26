@@ -54,7 +54,7 @@ def generate_data_path(dataset):
     return datapath, sol_path, plot_dir
 
 
-def accuracy_test(dataset):
+def accuracy_test(dataset, prior_weight = 1, LLMs = ['GPT3', 'GPT4', 'Gemini'], debug = 0):
 
     # Load the data
     datapath, sol_path, plot_dir = generate_data_path(dataset)
@@ -62,10 +62,11 @@ def accuracy_test(dataset):
     data = np.load(datapath).astype(np.float32)
     ground_truth = np.load(sol_path).astype(np.float32)
 
-    score_class = PriorScore(data, dataset = dataset, prior_weight= 0.29)
+    score_class = PriorScore(data, dataset = dataset, prior_weight= prior_weight, LLMs = LLMs)
 
     estimate_g_bic, score_bic = fit_bic(data)
-    estimate_g_prior, score_prior = fit(score_class)
+    print("BIC finished") if debug else None
+    estimate_g_prior, score_prior = fit(score_class, debug=debug)
 
     plot_result(estimate_g_bic, ground_truth, plot_dir, dataset, f"BIC score: {score_bic:.2f}", count_accuracy(ground_truth, estimate_g_bic))
     plot_result(estimate_g_prior, ground_truth, plot_dir, dataset, f"BIC with prior: {score_prior:.2f}", count_accuracy(ground_truth, estimate_g_prior))
@@ -94,11 +95,19 @@ def time_test(dataset):
 
 if __name__ == "__main__":
 
-    datasets = ['LUCAS', "Asia", "SACHS"]
+    # datasets = ['LUCAS', "Asia", "SACHS"]
+
+    # Asia 1.5
+    # SACHS 1.3
+    datasets = ['Survey']
 
     for dataset in datasets:
-        accuracy_test(dataset)
-
+        accuracy_test(dataset, prior_weight = 4, LLMs=['True'], debug = 1)
+        # for weight in np.linspace(4, 7, 15):
+        #     print(f"------------------------------Weight: {weight} -----------------------------")
+        #     accuracy_test(dataset, prior_weight = weight, LLMs=['True'])
+        #     print("")
+        #     print("")
     
 
     

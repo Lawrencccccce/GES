@@ -16,11 +16,11 @@ import numpy as np
 class PriorScore(GaussObsL0Pen):
 
 
-    def __init__(self, data, dataset, lmbda=None, method='scatter', cache=True, debug=0, prior_weight = 1):
+    def __init__(self, data, dataset, LLMs = ['GPT3', 'GPT4', 'Gemini'], lmbda=None, method='scatter', cache=True, debug=0, prior_weight = 1):
         super().__init__(data = data, lmbda = lmbda, method = method, cache = cache, debug = debug)
         self.n, self.p = data.shape
         self.data = data
-        self.prior = PriorKnowledge(dataset)
+        self.prior = PriorKnowledge(dataset, LLMs = LLMs)
         self.dataset = dataset
         self.LLM_weights = {}
         self.prior_weight = prior_weight
@@ -99,12 +99,16 @@ class PriorScore(GaussObsL0Pen):
 
                     self.LLM_weights[model] = super().full_score(LLM_result)
         
-        self.transfer_LLM_score_to_weights()
+        self._transfer_LLM_score_to_weights()
+        print(self.LLM_weights)
 
-
-    def transfer_LLM_score_to_weights(self):
+    def _transfer_LLM_score_to_weights(self):
 
         if len(self.LLM_weights) == 0:
+            return
+        
+        if len(self.LLM_weights) == 1:
+            self.LLM_weights[list(self.LLM_weights.keys())[0]] = 1
             return
 
         result = np.array([])

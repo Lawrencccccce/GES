@@ -199,7 +199,8 @@ def fit(score_class, completion_algorithm=None, A0=None, phases=['forward', 'bac
             print("-------------------------") if debug else None
             while True:
                 score_change, new_A = fun(A, score_class, max(0, debug - 1))
-                if score_change > 1e-6:
+                print(score_change) if debug else None
+                if score_change > 1e-1:
                     A = completion_algorithm(new_A)
                     total_score += score_change
                 else:
@@ -718,6 +719,7 @@ def score_valid_turn_operators(x, y, A, cache, debug=0):
     # Different validation/scoring logic when the edge to be turned is
     # essential (x <- x) or not (x - y)
     if A[x, y] != 0 and A[y, x] != 0:
+        print("here")
         return score_valid_turn_operators_undir(x, y, A, cache, debug=debug)
     else:
         return score_valid_turn_operators_dir(x, y, A, cache, debug=debug)

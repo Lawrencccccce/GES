@@ -1,6 +1,7 @@
 import numpy as np
 import csv
 import os
+from pgmpy.readwrite import BIFReader
 
 def csv_to_npy(csv_file, npy_file):
     # Read CSV file into a list of lists
@@ -151,6 +152,14 @@ def SACHS_csv_to_npy():
 
 
 if __name__ == "__main__":
-    SACHS_csv_to_npy()
+
+    current_dir = os.getcwd()
+    relative = os.path.join('datasets', 'child.bif')
+    absolute = os.path.join(current_dir, relative)
+
+    reader = BIFReader(absolute)
+    model = reader.get_model()
+
+    print(model.nodes())
     
 

@@ -78,6 +78,37 @@ class PriorKnowledge:
             for edge in re:
                 result_matrix[edge] = 1
             self.intersection_result[dataset] = result_matrix
+
+    def add_Earthquake_knowledge(self):
+        self.prior_knowledge['Earthquake'] = {}
+        if 'GPT3' in self.LLMs:
+            # GPT3 knowledge
+            self.prior_knowledge['Earthquake']['GPT3'] = np.zeros((5, 5))
+            # Burglary → Alarm
+            self.prior_knowledge['Earthquake']['GPT3'][0][1] = 1
+            # Earthquake → Alarm
+            self.prior_knowledge['Earthquake']['GPT3'][2][1] = 1
+            # Alarm → JohnCalls
+            self.prior_knowledge['Earthquake']['GPT3'][1][3] = 1
+            # Alarm → MaryCalls
+            self.prior_knowledge['Earthquake']['GPT3'][1][4] = 1
+
+        if 'GPT4' in self.LLMs:
+            # Initialize the matrix for 'EarthquakeModel'
+            self.prior_knowledge['Earthquake']['GPT4'] = np.zeros((5, 5))
+            # Burglary → Alarm
+            self.prior_knowledge['Earthquake']['GPT4'][0][1] = 1
+            # Earthquake → Alarm
+            self.prior_knowledge['Earthquake']['GPT4'][2][1] = 1
+            # Alarm → JohnCalls
+            self.prior_knowledge['Earthquake']['GPT4'][1][3] = 1
+            # Alarm → MaryCalls
+            self.prior_knowledge['Earthquake']['GPT4'][1][4] = 1
+
+        if 'Gemini' in self.LLMs:
+            self.prior_knowledge['Earthquake'] ['Gemini'] = np.zeros((5,5))
+            # Earthquake → Alarm (if earthquake alarm system exists)
+            self.prior_knowledge['Earthquake']['Gemini'][2][1] = 1  # Earthquake -> Alarm
         
 
     def add_Survey_true_knowledge(self):
